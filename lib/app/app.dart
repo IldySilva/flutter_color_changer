@@ -8,7 +8,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with TickerProviderStateMixin {
   final AppController _controller = AppController();
 
   @override
@@ -16,8 +16,15 @@ class _AppState extends State<App> {
     _controller.registerSetState(() {
       setState(_controller.generateColor);
     });
+    _controller.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..addListener(() {
+        setState(() {});
+      });
     super.initState();
   }
+
   @override
   void dispose() {
     _controller.colorChangeTimer.cancel();
@@ -73,24 +80,52 @@ class _AppState extends State<App> {
           ),
         ),
         body: GestureDetector(
-          onTapDown: (details) => setState(_controller.generateColor),
-          child: AnimatedContainer(
-            color: _controller.currentColor,
-            duration: const Duration(milliseconds: 400),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "H e l l o   T h e r e",
-                    style: TextStyle(
-                      color: _controller.contrastTextColor,
-                      fontSize: 24,
-                    ),
+          onTapDown: (details) {
+            setState(() {});
+            _controller.startClickEffect(details.localPosition);
+          },
+          child: Stack(
+            children: [
+              AnimatedContainer(
+                color: _controller.currentColor,
+                duration: const Duration(milliseconds: 400),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "H e l l o   T h e r e",
+                        style: TextStyle(
+                          color: _controller.contrastTextColor,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+
+              if (_controller.showEffect && _controller.clickPosition != null)
+                Positioned(
+                  left: _controller.clickPosition!.dx - 5,
+                  top: _controller.clickPosition!.dy - 5,
+                  child: AnimatedBuilder(
+                    animation: _controller.animationController,
+                    builder: (context, child) {
+                      return Container(
+                        width: 60 * _controller.animationController.value,
+                        height: 60 * _controller.animationController.value,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _controller.currentColor.withValues(
+                            alpha: 1.0 - _controller.animationController.value,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+            ],
           ),
         ),
       ),

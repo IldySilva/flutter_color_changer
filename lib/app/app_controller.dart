@@ -23,6 +23,19 @@ class AppController {
     }
   }
 
+  Offset? clickPosition;
+  bool showEffect = false;
+  late AnimationController animationController;
+
+  void startClickEffect(Offset position) {
+    clickPosition = position;
+    showEffect = true;
+     generateColor();
+    animationController.forward(from: 0).whenComplete(() {
+      showEffect = false;
+    });
+  }
+
   void generateColor() {
     final red = Random().nextInt(256);
     final blue = Random().nextInt(256);

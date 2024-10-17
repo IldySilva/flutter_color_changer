@@ -9,19 +9,18 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with TickerProviderStateMixin {
-  final AppController _controller = AppController();
 
+
+  final AppController _controller = AppController();
   @override
   void initState() {
+    super.initState();
+
     _controller.animationController = AnimationController(
       vsync: this,
       duration: defaultAnimationDuration,
     );
-    super.initState();
   }
-
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

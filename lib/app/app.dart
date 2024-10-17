@@ -12,6 +12,19 @@ class _AppState extends State<App> {
   final AppController _controller = AppController();
 
   @override
+  void initState() {
+    _controller.registerSetState(() {
+      setState(_controller.generateColor);
+    });
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _controller.colorChangeTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Cool Color Change',

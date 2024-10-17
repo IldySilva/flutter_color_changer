@@ -6,5 +6,4 @@ const double fullOpacityValue = 1.0;
 const double highLuminanceThreshold = 0.5;
 
 /// The default duration for animations in the application.
-/// This value can be used to maintain consistency across animations.
 const Duration defaultAnimationDuration = Duration(milliseconds: 400);

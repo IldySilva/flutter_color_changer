@@ -65,7 +65,6 @@ class AppController extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   /// Starts the visual effect at a specified [position] on the screen.
   void startClickEffect(Offset position) {
     clickPosition = position;
